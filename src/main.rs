@@ -3,7 +3,7 @@ use snippy_rs::{service, storage};
 
 /// Handy snippets manager which imports and exports snippets directly to your clipboard!
 #[derive(Debug, Parser)]
-#[clap(name = "snippy", bin_name = "snippy", version)]
+#[clap(name = "snippy-rs", bin_name = "snippy", version)]
 pub struct Cli {
     #[command(subcommand)]
     command: Commands,

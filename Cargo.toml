@@ -7,6 +7,10 @@ authors = ["Nicolas Chagnet <nchagnet@gmail.com>"]
 license-file = "LICENSE"
 readme = "README.md"
 
+[[bin]]
+name = "snippy"
+path = "src/main.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

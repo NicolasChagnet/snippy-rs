@@ -18,7 +18,7 @@ pub fn add_snippet(db: &mut storage::DatabaseModel, name: &str, description: &st
         std::process::exit(1);
     }
     let description_to_add = if description.is_empty() {
-        "No description provided"
+        "No description"
     } else {
         description
     };

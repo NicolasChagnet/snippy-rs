@@ -39,9 +39,15 @@ pub fn set_snippet(
 
 // Delete data from DB
 pub fn remove_snippet(db: &mut DatabaseModel, name: &str) -> Result<()> {
-    db.delete(name)
-        .with_context(|| "Error removing the snippet in the .json file!")?;
-    Ok(())
+    let deletion = db.delete(name);
+    match deletion {
+        Ok(_) => Ok(()),
+        Err(jasondb::error::JasonError::InvalidKey) => {
+            eprintln!("The snippet does not exist!");
+            std::process::exit(1)
+        }
+        _ => bail!("Error removing the snippet in the .json file!"),
+    }
 }
 
 // Gets all snippets from DB

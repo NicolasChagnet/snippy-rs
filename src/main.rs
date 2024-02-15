@@ -6,7 +6,7 @@ use snippy_rs::{service, storage};
 #[clap(name = "snippy-rs", bin_name = "snippy", version)]
 pub struct Cli {
     #[command(subcommand)]
-    command: Commands,
+    command: Option<Commands>,
 }
 
 #[derive(Debug, Subcommand)]
@@ -16,13 +16,11 @@ enum Commands {
     Set {
         /// The name of the snippet
         name: String,
-        description: String,
+        description: Option<String>,
     },
-    /// List snippets
-    List,
     /// Remove a snippet
     #[command(arg_required_else_help = true)]
-    Remove {
+    Del {
         /// The name of the snippet
         name: String,
     },
@@ -34,12 +32,13 @@ fn main() {
     let mut db = storage::connect_db().expect("Issue loading the json database file!");
 
     match args.command {
-        Commands::Set { name, description } => service::add_snippet(&mut db, &name, &description)
-            .expect("Error encountered when adding snippet!"),
-        Commands::List => {
-            service::list_snippets(&mut db).expect("Error encountered when listing snippets!")
+        Some(Commands::Set { name, description }) => {
+            let description_content = description.unwrap_or("".to_string());
+            service::add_snippet(&mut db, &name, &description_content)
         }
-        Commands::Remove { name } => service::remove_snippet(&mut db, &name)
+        .expect("Error encountered when adding snippet!"),
+        Some(Commands::Del { name }) => service::remove_snippet(&mut db, &name)
             .expect("Error encountered when removing snippet!"),
+        None => service::list_snippets(&mut db).expect("Error encountered when listing snippets!"),
     }
 }

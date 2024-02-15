@@ -37,8 +37,10 @@ fn main() {
             service::add_snippet(&mut db, &name, &description_content)
         }
         .expect("Error encountered when adding snippet!"),
+
         Some(Commands::Del { name }) => service::remove_snippet(&mut db, &name)
             .expect("Error encountered when removing snippet!"),
+
         None => service::list_snippets(&mut db).expect("Error encountered when listing snippets!"),
     }
 }

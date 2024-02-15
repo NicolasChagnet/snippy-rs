@@ -5,8 +5,11 @@ edition = "2021"
 description = "A simple cross-platform CLI tool to manage user-defined snippets. Snippets are loaded and unloaded through the clipboard."
 authors = ["Nicolas Chagnet <nchagnet@gmail.com>"]
 repository = "https://github.com/NicolasChagnet/snippy-rs"
+license = "MIT"
 license-file = "LICENSE"
 readme = "README.md"
+keywords = ["snippets", "cli", "clipboard", "cross-platform"]
+categories = ["command-line-utilities"]
 
 [[bin]]
 name = "snippy"

@@ -1,6 +1,5 @@
 use humphrey_json::prelude::*;
 use std::fmt;
-// use uuid::Uuid;
 
 // Struct defining thecontent of a snippet
 #[derive(FromJson, IntoJson, Debug)]
@@ -10,14 +9,9 @@ pub struct Snippet {
     content: String,
 }
 
-// Implement the display trait for this, ignoring the content
+// Implement the display trait for this structure, ignoring the content field
 impl fmt::Display for Snippet {
-    // This trait requires `fmt` with this exact signature.
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Write strictly the first element into the supplied output
-        // stream: `f`. Returns `fmt::Result` which indicates whether the
-        // operation succeeded or failed. Note that `write!` uses syntax which
-        // is very similar to `println!`.
         write!(f, "({}) - {}", self.name, self.description)
     }
 }
@@ -26,7 +20,6 @@ impl fmt::Display for Snippet {
 impl Snippet {
     pub fn new(name: &str, description: &str, content: &str) -> Snippet {
         Snippet {
-            // id: Uuid::now_v7().to_string(),
             name: name.to_string(),
             description: description.to_string(),
             content: content.to_string(),

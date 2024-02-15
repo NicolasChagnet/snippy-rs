@@ -4,6 +4,7 @@ version = "1.0.0"
 edition = "2021"
 description = "A simple cross-platform CLI tool to manage user-defined snippets. Snippets are loaded and unloaded through the clipboard."
 authors = ["Nicolas Chagnet <nchagnet@gmail.com>"]
+repository = "https://github.com/NicolasChagnet/snippy-rs"
 license-file = "LICENSE"
 readme = "README.md"
 
@@ -17,6 +18,7 @@ path = "src/main.rs"
 anyhow = "1.0.79"
 arboard = "3.3.1"
 clap = { version = "4.5.0", features = ["derive"] }
+console = "0.15.8"
 dialoguer = { version = "0.11.0", features = ["fuzzy-select"] }
 directories = "5.0.1"
 humphrey_json = "0.2.2"

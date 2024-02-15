@@ -678,6 +678,7 @@ dependencies = [
  "anyhow",
  "arboard",
  "clap",
+ "console",
  "dialoguer",
  "directories",
  "humphrey_json",

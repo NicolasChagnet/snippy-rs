@@ -2,8 +2,10 @@
 name = "snippy-rs"
 version = "1.0.0"
 edition = "2021"
-description = "A minimalistic cross-platform CLI tool to manage user-defined snippets. Snippets are loaded and unloaded through the clipboard."
+description = "A simple cross-platform CLI tool to manage user-defined snippets. Snippets are loaded and unloaded through the clipboard."
 authors = ["Nicolas Chagnet <nchagnet@gmail.com>"]
+license-file = "LICENSE"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

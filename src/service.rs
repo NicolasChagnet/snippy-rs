@@ -16,14 +16,19 @@ pub fn add_snippet(db: &mut storage::DatabaseModel, name: &str, description: &st
         eprintln!("Trying to set an empty key or value!");
         std::process::exit(1);
     }
-    let snippet = storage::set_snippet(db, name, description, &content_trimmed)?;
-    Ok(println!("Snippet added: {}", snippet))
+    let description_to_add = if description.is_empty() {
+        "No description provided"
+    } else {
+        description
+    };
+    let snippet = storage::set_snippet(db, name, description_to_add, &content_trimmed)?;
+    Ok(println!("Snippet set: {}", snippet))
 }
 
 // Remove a snippet by name
 pub fn remove_snippet(db: &mut storage::DatabaseModel, name: &str) -> Result<()> {
     storage::remove_snippet(db, name)?;
-    println!("Removed snippet named {}", name);
+    println!("Removed snippet: ({})", name);
     Ok(())
 }
 
@@ -33,7 +38,8 @@ pub fn list_snippets(db: &mut storage::DatabaseModel) -> Result<()> {
 
     // Prompt the user to choose one
     let choice: Option<usize> = FuzzySelect::new()
-        .with_prompt("Choose a snippet to copy:")
+        .with_prompt("Choose a snippet to copy (Esc to cancel):")
+        .report(false)
         .items(&snippets)
         .interact_opt()
         .with_context(|| "Error when parsing selection!")?;
@@ -45,7 +51,7 @@ pub fn list_snippets(db: &mut storage::DatabaseModel) -> Result<()> {
         clipboard
             .set_text(chosen_snippet.get_content())
             .with_context(|| "Error setting content to clipboard!")?;
-        println!("Snippet {} set to clipboard!", chosen_snippet.get_name())
+        println!("Snippet ({}) set to clipboard!", chosen_snippet.get_name())
     }
     Ok(())
 }

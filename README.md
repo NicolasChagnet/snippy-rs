@@ -44,5 +44,12 @@ which will start a selector with fuzzy search. Pressing `Enter` will copy the sn
 
 A snippet can be removed by using
 ```
-snippy del NAME
+snippy del
 ```
+and select the snippet to delete from the menu.
+
+A snippet can be edited using the current clipboard content with
+```
+snippy edit
+```
+and select the snippet to edit from the menu

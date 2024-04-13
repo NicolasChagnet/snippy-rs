@@ -16,14 +16,15 @@ enum Commands {
     Set {
         /// The name of the snippet
         name: String,
+        /// The description of the snippet
         description: Option<String>,
     },
+    /// Edit a snippet
+    #[command(arg_required_else_help = false)]
+    Edit,
     /// Remove a snippet
-    #[command(arg_required_else_help = true)]
-    Del {
-        /// The name of the snippet
-        name: String,
-    },
+    #[command(arg_required_else_help = false)]
+    Del,
 }
 
 fn main() {
@@ -37,10 +38,13 @@ fn main() {
             service::add_snippet(&mut db, &name, &description_content)
         }
         .expect("Error encountered when adding snippet!"),
+        Some(Commands::Edit) => {
+            service::edit_snippet(&mut db).expect("Error encountered when editing snippet!")
+        }
+        Some(Commands::Del) => {
+            service::delete_snippet(&mut db).expect("Error encountered when removing snippet!")
+        }
 
-        Some(Commands::Del { name }) => service::remove_snippet(&mut db, &name)
-            .expect("Error encountered when removing snippet!"),
-
-        None => service::list_snippets(&mut db).expect("Error encountered when listing snippets!"),
+        None => service::choose_snippet(&mut db).expect("Error encountered when listing snippets!"),
     }
 }

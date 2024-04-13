@@ -51,8 +51,33 @@ fn get_format_snippets(snippets: &[Snippet]) -> Vec<String> {
         .collect()
 }
 
+// Copies content of a snippet to clipboard
+pub fn copy_snippet_hook(_db: &mut storage::DatabaseModel, snippet: &Snippet) -> Result<()> {
+    let mut clipboard = Clipboard::new().with_context(|| "Error loading clipboard!")?;
+    // Set to clipboard
+    clipboard
+        .set_text(snippet.get_content())
+        .with_context(|| "Error setting content to clipboard!")?;
+    println!("Snippet ({}) set to clipboard!", snippet.get_name());
+    Ok(())
+}
+
+// Edits snippets with current content of clipboard
+pub fn edit_snippet_hook(db: &mut storage::DatabaseModel, snippet: &Snippet) -> Result<()> {
+    add_snippet(db, snippet.get_name(), snippet.get_description())?;
+    Ok(())
+}
+
+pub fn delete_snippet_hook(db: &mut storage::DatabaseModel, snippet: &Snippet) -> Result<()> {
+    remove_snippet(db, snippet.get_name())?;
+    Ok(())
+}
+
 // Let the user choose a snippet, set to clipboard
-pub fn list_snippets(db: &mut storage::DatabaseModel) -> Result<()> {
+pub fn list_snippets(
+    db: &mut storage::DatabaseModel,
+    action: fn(&mut storage::DatabaseModel, &Snippet) -> Result<()>,
+) -> Result<()> {
     let snippets = storage::get_all_snippets(db)?; // Get all snippets
     let snippets_format: Vec<String> = get_format_snippets(&snippets);
     // Clear the terminal
@@ -66,14 +91,22 @@ pub fn list_snippets(db: &mut storage::DatabaseModel) -> Result<()> {
         .interact_opt()
         .with_context(|| "Error when parsing selection!")?;
     if let Some(choice_int) = choice {
-        let chosen_snippet = &snippets[choice_int];
-        // Load clipboard!
-        let mut clipboard = Clipboard::new().with_context(|| "Error loading clipboard!")?;
-        // Set to clipboard
-        clipboard
-            .set_text(chosen_snippet.get_content())
-            .with_context(|| "Error setting content to clipboard!")?;
-        println!("Snippet ({}) set to clipboard!", chosen_snippet.get_name())
+        action(db, &snippets[choice_int])?;
     }
+    Ok(())
+}
+
+pub fn choose_snippet(db: &mut storage::DatabaseModel) -> Result<()> {
+    list_snippets(db, copy_snippet_hook)?;
+    Ok(())
+}
+
+pub fn edit_snippet(db: &mut storage::DatabaseModel) -> Result<()> {
+    list_snippets(db, edit_snippet_hook)?;
+    Ok(())
+}
+
+pub fn delete_snippet(db: &mut storage::DatabaseModel) -> Result<()> {
+    list_snippets(db, delete_snippet_hook)?;
     Ok(())
 }
